@@ -100,13 +100,7 @@ app.get("api/orders", async(req, res) => {
 app.get("/success", (req, res) => {
     res.send("Payment Successful");
 });
-app.get("/test", (req, res) => {
-    res.send("Server works");
-});
 
-mongoose.connect(process.env.MONGO_URI). then(() => {
-    console.log("MongoDB connected");
-});
 
 app.get("/", (req, res) => {
     res.send("E-commerce API Running...");
