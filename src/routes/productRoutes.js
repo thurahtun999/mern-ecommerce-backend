@@ -12,6 +12,7 @@ import {admin} from "../middlewares/adminMiddleware.js";
 import upload from "../middlewares/upload.js";
 const router = express.Router();
 
+router.post ("/", protect, admin, upload.single("image"), createProduct);
 
 router.route("/")
     .get(getProducts)
