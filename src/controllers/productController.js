@@ -142,7 +142,10 @@ asyncHandler(async (req, res) => {
 export const updateProduct =
 asyncHandler(async (req, res) => {
 
-    if(!product) {
+    const product = await
+    Product.findById(req.params.id);
+
+     if(!product) {
         res.status(404);
         throw new Error("Product not found")
     }
@@ -154,9 +157,7 @@ asyncHandler(async (req, res) => {
     const price = req.body.price !== undefined ? Number(req.body.price) : undefined;
     const stock = req.body.stock !== undefined ? Number(req.body.stock) : undefined;
 
-    const product = await
-    Product.findById(req.params.id);
-
+    
 
     if (product) {
 
