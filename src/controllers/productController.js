@@ -167,16 +167,24 @@ asyncHandler(async (req, res) => {
         throw new Error("Name is required");
     }
 
-    if (req.body.price !== undefined && (isNaN(price) || price < 0)) {
+    if (req.body.price !== undefined || req.body.price === "") {
          res.status(400);
-        throw new Error("Invalid price");
+        throw new Error("Price is required");
     }
-       
+   
 
-    if (req.body.stock !== undefined && (isNaN(stock) || stock < 0))
+    if ((req.body.stock !== undefined || req.body.stock === ""))
     {
         res.status(400);
-        throw new Error("Invalid stock")
+        throw new Error("Stock is required");
+    }
+     if (isNaN(price) || price < 0) {
+        res.status(400);
+        throw new Error("Invalid price");
+    }
+     if (isNaN(stock) || stock < 0) {
+        res.status(400);
+        throw new Error("Invalid stock");
     }
         
         // update fields//
