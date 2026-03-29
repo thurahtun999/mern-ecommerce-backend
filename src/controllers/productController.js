@@ -147,8 +147,8 @@ asyncHandler(async (req, res) => {
     const description= req.body.description;
     const category = req.body.category;
 
-    const price = req.body.price ? Number(req.body.price) : undefined;
-    const stock = req.body.stock ? Number(req.body.stock) : undefined;
+    const price =  Number(req.body.price);
+    const stock =  Number(req.body.stock);
 
     const product = await
     Product.findById(req.params.id);
@@ -167,13 +167,13 @@ asyncHandler(async (req, res) => {
         throw new Error("Name is required");
     }
 
-    if (price !== undefined && (isNaN(price) || price < 0)) {
+    if (req.body.price !== undefined && (isNaN(price) || price < 0)) {
          res.status(400);
         throw new Error("Invalid price");
     }
        
 
-    if (stock !== undefined && (isNaN(stock) || stock < 0))
+    if (req.body.stock !== undefined && (isNaN(stock) || stock < 0))
     {
         res.status(400);
         throw new Error("Invalid stock")
