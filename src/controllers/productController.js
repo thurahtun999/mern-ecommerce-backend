@@ -142,22 +142,22 @@ asyncHandler(async (req, res) => {
 export const updateProduct =
 asyncHandler(async (req, res) => {
 
-    const product = await
-    Product.findById(req.params.id);
-
-     if(!product) {
-        res.status(404);
-        throw new Error("Product not found")
-    }
 
     const name = req.body.name;
     const description= req.body.description;
     const category = req.body.category;
 
-    const price = req.body.price !== undefined ? Number(req.body.price) : undefined;
-    const stock = req.body.stock !== undefined ? Number(req.body.stock) : undefined;
+    const price = req.body.price ? Number(req.body.price) : undefined;
+    const stock = req.body.stock ? Number(req.body.stock) : undefined;
 
-    
+    const product = await
+    Product.findById(req.params.id);
+
+    if(!product) {
+        res.status(404);
+        throw new Error("Product not found");
+    }
+ 
 
     if (product) {
 
@@ -184,7 +184,7 @@ asyncHandler(async (req, res) => {
         product.price = price !== undefined ? price : product.price;
         product.description = description || product.description;
         product.category = category || product.category;
-        product.stock = stock !== undefined ? stock : product.stock;
+        product.stock = stock !== undefined ? stock: product.stock;
 
 
         //image update
