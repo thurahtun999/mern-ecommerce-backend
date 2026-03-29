@@ -141,39 +141,49 @@ asyncHandler(async (req, res) => {
 });
 export const updateProduct =
 asyncHandler(async (req, res) => {
-    console.log("Looking for ID:", req.params.id);
-    console.log("File:", req.file);
-    console.log("body:", req.body);
+
+    if(!product) {
+        res.status(404);
+        throw new Error("Product not found")
+    }
+
+    const name = req.body.name;
+    const description= req.body.description;
+    const category = req.body.category;
+
+    const price = req.body.price !== undefined ? Number(req.body.price) : undefined;
+    const stock = req.body.stock !== undefined ? Number(req.body.stock) : undefined;
 
     const product = await
     Product.findById(req.params.id);
-    console.log("Found product:", product);
+
 
     if (product) {
 
-        if(req.body.name !== undefined && req.body.name.trim() === "") 
+        if (name !== undefined && name.trim() === "") 
             {
         res.status(400);
         throw new Error("Name is required");
     }
 
-    if (price && (isNaN(price) || price < 0))
-    {
-        res.status(400);
+    if (price !== undefined && (isNaN(price) || price < 0)) {
+         res.status(400);
         throw new Error("Invalid price");
     }
-    if (stock && (isNaN(stock) || stock < 0))
+       
+
+    if (stock !== undefined && (isNaN(stock) || stock < 0))
     {
         res.status(400);
         throw new Error("Invalid stock")
     }
         
         // update fields//
-        product.name = req.body.name || product.name;
-        product.price = req.body.price? Number(req.body.price) : product.price;
-        product.description = req.body.description || product.description;
-        product.category = req.body.category || product.category;
-        product.stock = req.body.stock ? Number(req.body.stock) : product.stock;
+        product.name = name || product.name;
+        product.price = price !== undefined ? price : product.price;
+        product.description = description || product.description;
+        product.category = category || product.category;
+        product.stock = stock !== undefined ? stock : product.stock;
 
 
         //image update
