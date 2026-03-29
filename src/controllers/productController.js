@@ -142,57 +142,47 @@ asyncHandler(async (req, res) => {
 export const updateProduct =
 asyncHandler(async (req, res) => {
 
-
-    const name = req.body.name;
-    const description= req.body.description;
-    const category = req.body.category;
-
-    const price =  Number(req.body.price);
-    const stock =  Number(req.body.stock);
-
     const product = await
     Product.findById(req.params.id);
 
-    if(!product) {
+    if (!product) {
         res.status(404);
         throw new Error("Product not found");
     }
- 
+
+     const name = req.body.name;
+     const description = req.body.description;
+     const category = req.body.category;
+     const price =req.body.price ? Number(req.body.price) : undefined;
+     const stock =req.body.stock ? Number(req.body.stock) : undefined;
+
+  
 
     if (product) {
 
-        if (name !== undefined && name.trim() === "") 
+        if(req.body.name !== undefined && req.body.name.trim() === "") 
             {
         res.status(400);
         throw new Error("Name is required");
     }
 
-    if (req.body.price !== undefined || req.body.price === "") {
-         res.status(400);
-        throw new Error("Price is required");
-    }
-   
-
-    if ((req.body.stock !== undefined || req.body.stock === ""))
+    if (price && (isNaN(price) || price < 0))
     {
-        res.status(400);
-        throw new Error("Stock is required");
-    }
-     if (isNaN(price) || price < 0) {
         res.status(400);
         throw new Error("Invalid price");
     }
-     if (isNaN(stock) || stock < 0) {
+    if (stock && (isNaN(stock) || stock < 0))
+    {
         res.status(400);
-        throw new Error("Invalid stock");
+        throw new Error("Invalid stock")
     }
         
         // update fields//
-        product.name = name || product.name;
-        product.price = price !== undefined ? price : product.price;
-        product.description = description || product.description;
-        product.category = category || product.category;
-        product.stock = stock !== undefined ? stock: product.stock;
+        product.name = req.body.name || product.name;
+        product.price = req.body.price? Number(req.body.price) : product.price;
+        product.description = req.body.description || product.description;
+        product.category = req.body.category || product.category;
+        product.stock = req.body.stock ? Number(req.body.stock) : product.stock;
 
 
         //image update
